@@ -20,10 +20,6 @@ const navigate = useNavigate();
         <div className="flex flex-col justify-center">
       <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
 
-      <div>first name is {firstName}</div>
-      <div>first name is {lastName}</div>
-      <div>first name is {username}</div>
-      <div>first name is {password}</div>
        <Heading label={"Sign Up"} />
        <SubHeading subheading={"Enter Your Information to Create an Account"} />
        <InputBox label={"First Name"}  placeholder={"John"} onChange={e=>{
