@@ -31,7 +31,9 @@ const navigate = useNavigate();
             password
         })
         
+        
         localStorage.setItem("token", response.data.token )
+        
         navigate("/dashboard")
 
       }}/>
