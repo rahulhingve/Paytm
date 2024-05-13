@@ -64,10 +64,12 @@ router.post("/signup", async  (req, res)=> {
     }, JWT_SECRET)
 
 
-    res.json({
+     res.json({
         message: "User created successfully",
+        
         token: token
     })
+    return;
 
 })
 
@@ -102,6 +104,7 @@ router.post("/signin", async (req, res) => {
         }, JWT_SECRET)
 
         res.status(200).json({
+            // userId: userId,
             token: token
         })
         return;
