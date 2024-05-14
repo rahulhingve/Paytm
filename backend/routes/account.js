@@ -12,9 +12,9 @@ router.get("/balance", authMiddleware, async (req, res) => {
     const account = await Account.findOne({
         userId: req.userId
     })
-
+const balance = account.balance.toFixed(2);
     return res.status(200).json({
-        balance: account.balance
+        balance: balance
     })
 
 })
