@@ -1,6 +1,6 @@
 const express = require("express");
 const zod = require("zod");
-const { User , Account} = require("../db")
+const { User, Account } = require("../db")
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
@@ -15,9 +15,9 @@ const signUpScheme = zod.object({
 
 })
 
-router.post("/signup", async  (req, res)=> {
+router.post("/signup", async (req, res) => {
 
-    
+
 
 
     // this is very high lever hard to grasp
@@ -64,9 +64,9 @@ router.post("/signup", async  (req, res)=> {
     }, JWT_SECRET)
 
 
-     res.json({
+    res.json({
         message: "User created successfully",
-        
+
         token: token
     })
     return;
@@ -99,13 +99,15 @@ router.post("/signin", async (req, res) => {
     })
     if (findUser) {
         const userId = findUser._id;
+
         const token = jwt.sign({
             userId
         }, JWT_SECRET)
 
         res.status(200).json({
             // userId: userId,
-            token: token
+            token: token,
+
         })
         return;
     }
@@ -116,6 +118,18 @@ router.post("/signin", async (req, res) => {
 
 })
 
+router.get("/username", authMiddleware, async (req, res) => {
+
+    const user = await User.findOne({
+        _id: req.userId
+    })
+    const firstName = user.firstName
+    res.status(200).json({
+        firstName
+    })
+    return;
+
+})
 
 const updateSchema = zod.object({
     password: zod.string().min(8).optional(),
@@ -142,22 +156,34 @@ router.put("/", authMiddleware, async (req, res) => {
 
 })
 
-router.get("/bulk",authMiddleware,async (req, res) => {
+router.get("/bulk", authMiddleware, async (req, res) => {
     const filter = req.query.filter || "";
-
+    const userId = req.userId;
 
     const users = await User.find({
-
-        $or: [{
-            firstName: {
-                "$regex": filter
+        $and:[
+            {
+                _id:{
+                    $ne:userId
+                }
+            },
+            {
+                $or: [{
+                    firstName: {
+                        "$regex": filter
+                    }
+        
+                }, {
+                    lastName: {
+                        "$regex": filter
+                    }
+                }]
             }
+        ]
 
-        }, {
-            lastName: {
-                "$regex": filter
-            }
-        }]
+
+
+        
 
 
     })
