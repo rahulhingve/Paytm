@@ -9,7 +9,8 @@ import { Users } from "../components/Users";
 
 
 export function Dashboard() {
-const [balance , setBalance] = useState("")  
+const [balance , setBalance] = useState("") 
+const [firstName,setFirstName]=useState("") 
 
 useEffect(() => {
     async function fetchBalance() {
@@ -20,6 +21,7 @@ useEffect(() => {
                 }
             });
             setBalance(response.data.balance);
+            
         } catch (error) {
             console.log("Error fetching balance:", error);
             
@@ -28,8 +30,24 @@ useEffect(() => {
     
     fetchBalance();
 }, []);
+
+useEffect(()=>{
+    async function getUserName(){
+
+        const response = await axios.get("http://localhost:3000/api/v1/user/username",{
+            headers : {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            }
+        })
+        setFirstName(response.data.firstName)
+    }
+    getUserName();
+},[])
+
+
+
     return <div>
-        <Appbar />
+        <Appbar name={firstName} />
         <Balance value={balance} />
        <Users />
     </div>
