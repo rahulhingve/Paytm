@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heading } from "../components/Heading";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 
@@ -10,7 +10,7 @@ export function Send() {
     const lastName = searchParams.get("lastName")
     const id = searchParams.get("id");
     const [amount, setAmount] = useState("")
-
+    const navigate = useNavigate();
 
     function capitalize(s) {
         return s[0].toUpperCase() + s.slice(1);
@@ -23,7 +23,7 @@ export function Send() {
             >
                 <div class="flex flex-col space-y-1.5 p-6">
                     <h2 class="text-3xl font-bold text-center">Send Money</h2>
-                    
+
                 </div>
                 <div class="p-6">
                     <div class="flex items-center space-x-4">
@@ -49,17 +49,17 @@ export function Send() {
                                 placeholder="Enter amount"
                             />
                         </div>
-                        <button onClick={async ()=>{
+                        <button onClick={async () => {
 
-                           await axios.post("http://localhost:3000/api/v1/account/transfer",{
-                                to : id,
+                            await axios.post("http://localhost:3000/api/v1/account/transfer", {
+                                to: id,
                                 amount
-                            },{
-                                headers:{
-                                    Authorization : "Bearer " + localStorage.getItem("token")
+                            }, {
+                                headers: {
+                                    Authorization: "Bearer " + localStorage.getItem("token")
                                 }
                             })
-                            
+                            navigate("/done")
                         }} className="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
                             Initiate Transfer
                         </button>
